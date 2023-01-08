@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ post.title }} {% endblock %}
+
+{% load social_share %}
+{% block content %}
+<section class="post">
+   
+        <div>
+            {% if post.image %}
+                <figure class="image">
+                    <img src="{{ post.image.url }}" alt="">
+                </figure>
+            {% endif %}
+            <h2 class="date">{{ post.created_at|date:'M-d-Y' }}</h2>
+            <h1 class="title">{{ post.title }}</h1>
+            <p>{{ post.body }}</p>
+            <hr>
+            <p><small>Category: <a href="{% url 'category_details' post.category.slug %}">{{ post.category }}</a></small></p>
+            {% post_to_twitter "{{ post.title }}. Check it out!" object_or_url '<i class="fab fa-twitter"></i>' %}
+            {% post_to_facebook object_or_url '<i class="fab fa-facebook-f"></i>' %}
+        </div>
+
+        <div class="formdiv-container">
+            <h2 class="title-comment">Comments</h2>
+
+            <form method="post" class="box">
+                {% csrf_token %} 
+                {{ form.as_p }}
+                    <div class="control">
+                        <button class="btn">Submit Comment</button>
+                    </div>
+            </form>
+            {% for comment in post.comments.all %}
+           
+                <div class="media-content box">
+                    <strong>{{ comment.name }}</strong><small>{{ comment.created_at|timesince }} ago</small><br>
+                    <p>{{ comment.body}}</p>
+                </div>
+            
+            {% endfor %}
+        </div>
+</section>
+{% endblock %}

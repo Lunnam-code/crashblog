@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block title %} {{ category.title}} | {% endblock %}
+{% block content %}
+
+    <section class="post">
+        {% for post in posts %}
+            <div>
+                <a href="{% url 'post_details' post.category.slug post.slug %}">
+                <h2 class="date">{{ post.created_at|date:'M-d-Y' }}</h2>
+                <h1 class="title">{{ post.title }}</h1>
+                <p>{{ post.intro }}</p>
+                </a>
+            </div>
+            {% empty %}
+                <div class="content">
+                    <p>There is no post in this category...</p>
+                </div>
+            
+        {% endfor %}
+    </section>
+    
+{% endblock %}
